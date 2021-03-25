@@ -1,21 +1,23 @@
 package fr.esiea.ex4A.controller;
 
 import fr.esiea.ex4A.data.UserInfo;
-import fr.esiea.ex4A.repository.UserRepository;
+import fr.esiea.ex4A.service.UserService;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class InscriptionController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public InscriptionController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public InscriptionController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/api/inscription")
-    public void inscription(@RequestBody UserInfo userInfo) {
-        userRepository.addUser(userInfo);
+    public void inscription(@RequestBody UserInfo userInfo) throws IOException {
+        userService.registerUser(userInfo);
     }
 
 }

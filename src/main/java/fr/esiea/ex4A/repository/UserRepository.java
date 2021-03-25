@@ -20,10 +20,6 @@ public class UserRepository {
         this.cacheData = new HashMap<>();
     }
 
-    public Map<UserInfo, Integer> getCacheData() {
-        return cacheData;
-    }
-
     public UserInfo getUser(String name, String country) {
         return userInfos.stream().filter(userInfo -> userInfo.name.equals(name) && userInfo.country.equals(country)).findFirst().orElse(null);
     }

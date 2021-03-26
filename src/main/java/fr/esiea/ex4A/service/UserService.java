@@ -26,8 +26,10 @@ public class UserService {
     public void registerUser(UserInfo userInfo) throws IOException {
         if (userRepository.getUser(userInfo.name, userInfo.country) == null) {
             UserClient userClient = getUserClient(userInfo.name, userInfo.country);
-            userRepository.cacheData.put(userInfo, userClient.age);
-            userRepository.addUser(userInfo);
+            if (userClient != null) {
+                userRepository.cacheData.put(userInfo, userClient.age);
+                userRepository.addUser(userInfo);
+            }
         }
     }
 
@@ -40,7 +42,7 @@ public class UserService {
         Call<ResponseBody> call = agifyClient.getUser(name, country);
         Response<ResponseBody> response = call.execute();
         JSONObject jsonObject = new JSONObject(response.body().string());
-        return new UserClient(jsonObject.getString("name"), jsonObject.getInt("age"), jsonObject.getInt("count"), jsonObject.getString("country_id"));
+        return jsonObject.get("age") == null ? null : new UserClient(jsonObject.getString("name"), jsonObject.getInt("age"), jsonObject.getInt("count"), jsonObject.getString("country_id"));
     }
 
 }
